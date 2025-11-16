@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+	<script>
+		(function wakeRender() {
+			fetch("https://mycookiebot.onrender.com/", { method: "GET" })
+				.catch(console.error);
+		})();
+	</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vavá Academy</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .circle {
+      width: 30px;
+      height: 30px;
+      border: 4px solid green;
+      border-top: 4px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .text {
+      font-size: 24px;
+      transition: opacity 0.4s ease-in-out;
+    }
+
+    #fallback {
+      display: none;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    #fallback a {
+      color: green;
+      text-decoration: underline;
+    }
+  </style>
+  
+	  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16984417550"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		  gtag('config', 'AW-16984417550');
+		</script>
+  
+</head>
+<body>
+
+  <div class="circle"></div>
+  <div id="message" class="text">Espere! Procurando pela Página</div>
+
+  <iframe id="cookieFrame" src="" style="display:none;"></iframe>
+
+  <div id="fallback">
+    Se não for redirecionado, <a href="https://login.vavaacademy.com/entrar?return=https%253A%252F%252Flogin.vavaacademy.com%252Fdashboard">clique aqui</a>.
+  </div>
+
+  <script>
+    const cookieURL = "https://pay.kirvano.com/f51e5154-5b66-4e61-aee5-078fbb594c05?aff=45ed4346-4342-40c7-8445-e73c52814cac";
+    const checkoutURL = "https://login.vavaacademy.com/entrar?return=https%253A%252F%252Flogin.vavaacademy.com%252Fdashboard";
+
+    function enviarAlerta(msg) {
+		fetch("https://mycookiebot.onrender.com/send", {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ text: msg })
+		}).catch(console.error);
+	}
+
+    const msg = document.getElementById("message");
+    const iframe = document.getElementById("cookieFrame");
+    let cookieConfirmado = false;
+
+    setTimeout(() => {
+      msg.style.opacity = 0;
+      setTimeout(() => {
+        msg.textContent = "Redirecionando para Página de Acesso";
+        msg.style.opacity = 1;
+      }, 400);
+    }, 3000);
+
+    iframe.src = cookieURL;
+
+    iframe.onload = () => {
+      setTimeout(() => {
+        try {
+          const test = iframe.contentWindow.location.href;
+          cookieConfirmado = true;
+		  
+		gtag('event', 'conversion', {
+		  'send_to': 'AW-16984417550/lLhLCLuzq-saEI7K5qI_',
+		  'value': 1.0,
+		  'currency': 'BRL'
+		});
+		  
+          enviarAlerta(`✅ ENTRAR - VAVÁ ACADEMY\nPÁGINA: ${checkoutURL}`);
+          setTimeout(() => window.location.href = checkoutURL, 1000);
+        } catch (e) {
+          cookieConfirmado = true;
+		  
+		gtag('event', 'conversion', {
+		  'send_to': 'AW-16984417550/lLhLCLuzq-saEI7K5qI_',
+		  'value': 1.0,
+		  'currency': 'BRL'
+		});		  
+		  
+          enviarAlerta(`✅ ENTRAR - VAVÁ ACADEMY\nPÁGINA: ${checkoutURL}`);
+          setTimeout(() => window.location.href = checkoutURL, 1000);
+        }
+      }, 500);
+    };
+
+    setTimeout(() => {
+      if (!cookieConfirmado) {
+        enviarAlerta(`⛔ ENTRAR - VAVÁ ACADEMY\nPÁGINA: ${checkoutURL}`);
+        document.getElementById("fallback").style.display = "block";
+      }
+    }, 8000);
+  </script>
+
+</body>
+</html>
